@@ -18,12 +18,16 @@ public class ScoreRepositoryImpl implements ScoreRepository {
     // key: 학번, value: 성적정보
     private static final Map<Integer, Score> scoreMap;
 
+    // 학번 생성 일렬번호
+    private static int seq;
+
+
     // 객체 초기화는 직접하는 것보다 주입 또는 생성자를 통해 처리하는게 좋다
     static {
         scoreMap = new HashMap<>();
-        Score s1 = new Score("뽀로로", 100, 88, 33, 1, 0, 0.0, Grade.F);
-        Score s2 = new Score("춘식이", 33, 99, 11, 2, 0, 0.0, Grade.F);
-        Score s3 = new Score("쿠로미", 66, 55, 22, 3, 0, 0.0, Grade.F);
+        Score s1 = new Score("뽀로로", 100, 88, 33, ++seq, 0, 0.0, Grade.F);
+        Score s2 = new Score("춘식이", 33, 99, 11, ++seq, 0, 0.0, Grade.F);
+        Score s3 = new Score("쿠로미", 66, 55, 22, ++seq, 0, 0.0, Grade.F);
 
         scoreMap.put(s1.getStuNum(), s1);
         scoreMap.put(s2.getStuNum(), s2);
@@ -48,11 +52,14 @@ public class ScoreRepositoryImpl implements ScoreRepository {
 
     @Override
     public boolean save(Score score) {
+        // 학번 넣어주기
+        score.setStuNum(++seq);
+        scoreMap.put(score.getStuNum(), score);
         // 중복된 학번
         if (scoreMap.containsKey(score.getStuNum())) {
             return false;
         }
-        scoreMap.put(score.getStuNum(), score);
+
         return true;
     }
 

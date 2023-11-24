@@ -1,5 +1,6 @@
 package com.spring.mvc.chap04.controller;
 
+import com.spring.mvc.chap04.dto.ScoreRequestDTO;
 import com.spring.mvc.chap04.entity.Score;
 import com.spring.mvc.chap04.repository.ScoreRepository;
 import com.spring.mvc.chap04.repository.ScoreRepositoryImpl;
@@ -57,16 +58,36 @@ public class ScoreController {
 
     // 2. 성적정보를 데이터베이스에 저장하는 요청
     @PostMapping("/register")
-    public String register() {
+    public String register(ScoreRequestDTO score) {
         System.out.println("/score/register POST");
-        return "";
+        System.out.println("score = " + score);
+        // DTO를 entity로 변환하면서 데이터의 생성도 해야함
+        Score savedScore = new Score(score);
+        repository.save(savedScore);
+        /*
+            Forward
+             - forward는 요청 리소스를 그대로 전달함
+             - 따라서 URL은 변경되지 않고 한번의 요청과 한번의 응답만 이뤄짐
+            Redirect
+             - redirect는 요청 후에 자동응답이 나가고 2번째 자동요청이 들어오며서 2번째 응답을 내보냄
+             - 따라서 2번째 요청의 URL로 자동 변경됨.
+         */
+
+        // forward 할 때는 포워딩할 파일의 경로를 적는 것
+        // ex) /WEB-INF/views/chap04/score-list.jsp
+
+        // redirect 할 때는 리다이렉트 요청 URL을 적는 것
+        // ex)localhost
+        return "redirect:/score/list";
     }
 
     // 3. 성적 삭제 요청
-    @RequestMapping(value = "/remove", method = {RequestMethod.GET, RequestMethod.POST})
-    public String remove(HttpServletRequest request) {
+    @RequestMapping(value = "/remove/{stuNum}", method = {RequestMethod.GET, RequestMethod.POST})
+    public String remove(HttpServletRequest request, @PathVariable int stuNum) {
         System.out.printf("/score/remove %s\n", request.getMethod());
-        return "";
+        System.out.println("삭제할 학번: " + stuNum);
+        repository.delete(stuNum);
+        return "redirect:/score/list";
     }
 
     // 4. 성적 상세 조회 요청
