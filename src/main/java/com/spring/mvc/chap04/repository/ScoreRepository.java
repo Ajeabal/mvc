@@ -1,5 +1,6 @@
 package com.spring.mvc.chap04.repository;
 
+import com.spring.mvc.chap04.dto.ScoreRequestDTO;
 import com.spring.mvc.chap04.entity.Score;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public interface ScoreRepository {
 
     // 성적 정보 전체 목록 조회
     List<Score> findAll();
+    List<Score> findAll(String sort);
 
     // 성적 정보 등록
     boolean save(Score score);
@@ -23,5 +25,8 @@ public interface ScoreRepository {
 
     // 성적 정보 개별 조회
     Score findOne(int stuNum);
+
+    // 성적 정보 수정
+    boolean edit(Score score, int stuNum);
 
 }

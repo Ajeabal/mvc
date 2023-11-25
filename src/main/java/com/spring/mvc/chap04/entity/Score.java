@@ -29,6 +29,12 @@ public class Score {
         makeGrade();
     }
 
+    public Score(ScoreRequestDTO score, int stuNum) {
+        convertInputData(score, stuNum);
+        calculateTotalAndAverage();
+        makeGrade();
+    }
+
     private void makeGrade() {
         if (average > 90) {
             this.grade = Grade.A;
@@ -49,6 +55,13 @@ public class Score {
     }
 
     private void convertInputData(ScoreRequestDTO score) {
+        this.name = score.getName();
+        this.kor = score.getKor();
+        this.eng = score.getEng();
+        this.math = score.getMath();
+    }
+    private void convertInputData(ScoreRequestDTO score, int stuNum) {
+        this.stuNum = stuNum;
         this.name = score.getName();
         this.kor = score.getKor();
         this.eng = score.getEng();
