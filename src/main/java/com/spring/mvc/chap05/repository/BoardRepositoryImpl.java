@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
 
-@Repository
+//@Repository
 public class BoardRepositoryImpl implements BoardRepository {
 
     private static final Map<Integer, Board> boardMap;
@@ -64,8 +64,6 @@ public class BoardRepositoryImpl implements BoardRepository {
     @Override
     public Board findOne(int bno) {
         Board board = boardMap.get(bno);
-        int viewCount = board.getViewCount();
-        board.setViewCount(++viewCount);
         return board;
     }
 }

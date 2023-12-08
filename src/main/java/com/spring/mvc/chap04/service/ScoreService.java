@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class ScoreService {
     private final ScoreRepository repository;
 
-    public ScoreService(@Qualifier("dataBaseRepository") ScoreRepository repository) {
+    public ScoreService(@Qualifier("dbRepo") ScoreRepository repository) {
         this.repository = repository;
     }
 

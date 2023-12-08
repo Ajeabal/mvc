@@ -18,4 +18,6 @@ public interface BoardRepository {
     boolean delete(int bno);
 
     Board findOne(int bno);
+
+    default void updateViewCount(int bno) {}
 }

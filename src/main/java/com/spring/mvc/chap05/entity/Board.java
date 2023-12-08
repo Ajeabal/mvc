@@ -4,10 +4,17 @@ import com.spring.mvc.chap05.dto.BoardResponseDTO;
 import com.spring.mvc.chap05.dto.BoardWriteRequestDTO;
 import lombok.*;
 
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
-@Setter @Getter
-@ToString @EqualsAndHashCode
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class Board {
@@ -29,5 +36,13 @@ public class Board {
         this.title = dto.getTitle();
         this.content = dto.getContent();
         this.regDateTime = LocalDateTime.now();
+    }
+
+    public Board(ResultSet rs) throws SQLException {
+        this.boardNo = rs.getInt("board_no");
+        this.title = rs.getString("title");
+        this.content = rs.getString("content");
+        this.viewCount = rs.getInt("view_count");
+        this.regDateTime = rs.getTimestamp("reg_date_time").toLocalDateTime();
     }
 }

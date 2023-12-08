@@ -1,0 +1,48 @@
+package com.spring.mvc.chap05.repository;
+
+import com.spring.mvc.chap04.entity.Score;
+import com.spring.mvc.chap04.repository.ScoreRepository;
+import com.spring.mvc.chap05.entity.Board;
+import com.spring.mvc.chap06.jdbc.JdbcRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository()
+@RequiredArgsConstructor
+public class BoardJdbcRepository implements BoardRepository {
+
+    private final JdbcTemplate template;
+
+    @Override
+    public List<Board> findAll() {
+        String sql = "SELECT * FROM tbl_board ORDER BY board_no DESC ";
+        return template.query(sql, (rs, rn) -> new Board(rs));
+    }
+
+    @Override
+    public boolean save(Board board) {
+        String sql = "INSERT INTO tbl_board (title, content) VALUES (?, ?)";
+        return template.update(sql, board.getTitle(), board.getContent()) == 1;
+    }
+
+    @Override
+    public boolean delete(int bno) {
+        String sql = "DELETE FROM tbl_board WHERE board_no=?";
+        return template.update(sql, bno) == 1;
+    }
+
+    @Override
+    public Board findOne(int bno) {
+        String sql = "SELECT * FROM tbl_board WHERE board_no = ?";
+        return template.queryForObject(sql, (rs, rn) -> new Board(rs), bno);
+    }
+
+    @Override
+    public void updateViewCount(int bno) {
+        String sql = "UPDATE tbl_board SET view_count = view_count +1 WHERE board_no = ?";
+        template.update(sql, bno);
+    }
+}
