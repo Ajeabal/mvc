@@ -13,23 +13,15 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class BoardDetailResponseDTO {
 
-    private final int boardNo; // 게시글 번호
-    private final String title; // 제목
-    private final String content; // 내용
-    private final String date; // 작성일자시간
-    private final int viewCount; // 조회수
-
+    private final int boardNo;
+    private final String title;
+    private final String content;
+    private final String date;
 
     public BoardDetailResponseDTO(Board board) {
         this.boardNo = board.getBoardNo();
         this.title = board.getTitle();
         this.content = board.getContent();
-        this.date = makePrettierDateString(board.getRegDateTime());
-        this.viewCount = board.getViewCount();
-    }
-
-    static String makePrettierDateString(LocalDateTime regDateTime) {
-        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return pattern.format(regDateTime);
+        this.date = BoardResponseDTO.makePrettierDateString(board.getRegDateTime());
     }
 }

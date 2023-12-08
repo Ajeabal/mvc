@@ -11,12 +11,11 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-@Setter
-@Getter
-@ToString
-@EqualsAndHashCode
+@Setter @Getter
+@ToString @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Board {
 
     private int boardNo; // 게시글 번호
@@ -32,6 +31,7 @@ public class Board {
         this.regDateTime = LocalDateTime.now();
     }
 
+
     public Board(BoardWriteRequestDTO dto) {
         this.title = dto.getTitle();
         this.content = dto.getContent();
@@ -44,5 +44,10 @@ public class Board {
         this.content = rs.getString("content");
         this.viewCount = rs.getInt("view_count");
         this.regDateTime = rs.getTimestamp("reg_date_time").toLocalDateTime();
+
+    }
+
+    public void upViewCount() {
+        this.viewCount++;
     }
 }

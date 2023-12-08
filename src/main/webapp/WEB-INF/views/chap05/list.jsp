@@ -62,6 +62,13 @@
             </div>
         </c:forEach>
     </div>
+    <ul style="display:flex; font-size: 3em; justify-content:center;">
+        <li style="margin-right: 15px;"><a href="/board/list?pageNo=1">1</a></li>
+        <li style="margin-right: 15px;"><a href="/board/list?pageNo=2">2</a></li>
+        <li style="margin-right: 15px;"><a href="/board/list?pageNo=3">3</a></li>
+        <li style="margin-right: 15px;"><a href="/board/list?pageNo=4">4</a></li>
+        <li style="margin-right: 15px;"><a href="/board/list?pageNo=5">5</a></li>
+    </ul>
 </div>
 
 <!-- 모달 창 -->

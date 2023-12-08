@@ -15,11 +15,11 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class BoardResponseDTO {
 
-    private final int boardNo; // 게시글 번호
-    private final String shortTitle; // 제목
-    private final String shortContent; // 내용
-    private final String date; // 작성일자시간
-    private final int viewCount; // 조회수
+    private final int boardNo;
+    private final String shortTitle; // 5글자 이상이면 잘라내기
+    private final String shortContent; // 30자 이상이면 잘라내기
+    private final String date; // 날짜패턴 yyyy-MM-dd HH:mm
+    private final int viewCount;
 
 
     public BoardResponseDTO(Board board) {
@@ -45,10 +45,11 @@ public class BoardResponseDTO {
     }
 
     /**
+     *
      * @param targetString : 줄이고 싶은 원본 문자열
-     * @param wishLength   : 짜르고 싶은 글자 수
+     * @param wishLength : 짜르고 싶은 글자 수
      * @return : wishLength보다 targetString이 길면
-     * wishLength만큼 짤라서 뒤에 ... 붙여서 리턴
+     *              wishLength만큼 짤라서 뒤에 ... 붙여서 리턴
      */
     private static String sliceString(String targetString, int wishLength) {
         return (targetString.length() > wishLength)
@@ -56,4 +57,5 @@ public class BoardResponseDTO {
                 : targetString
                 ;
     }
+
 }

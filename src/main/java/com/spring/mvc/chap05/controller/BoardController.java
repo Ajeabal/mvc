@@ -3,6 +3,7 @@ package com.spring.mvc.chap05.controller;
 import com.spring.mvc.chap04.dto.ScoreResponseDTO;
 import com.spring.mvc.chap04.entity.Score;
 import com.spring.mvc.chap04.service.ScoreService;
+import com.spring.mvc.chap05.common.Page;
 import com.spring.mvc.chap05.dto.BoardDetailResponseDTO;
 import com.spring.mvc.chap05.dto.BoardResponseDTO;
 import com.spring.mvc.chap05.dto.BoardWriteRequestDTO;
@@ -23,41 +24,50 @@ import java.util.List;
 @RequestMapping("/board")
 @RequiredArgsConstructor
 public class BoardController {
-    private final BoardService service;
+    private final BoardService boardService;
 
-    // 1. 목록 조회 요청(/board/list : GET)
+    // 1. 목록 조회 요청 (/board/list : GET)
     @GetMapping("/list")
-    public String list(Model model) {
-        System.out.println("/board/list GET");
-
-        List<BoardResponseDTO> boardList = service.getList();
-        model.addAttribute("bList", boardList);
+    public String list(Page page,Model model) {
+        System.out.println("/board/list : GET!");
+        List<BoardResponseDTO> dtoList = boardService.getList(page);
+        System.out.println(page);
+        model.addAttribute("bList", dtoList);
         return "chap05/list";
     }
-    // 2. 글쓰기 화면 요청(/board/write : GET)
+
+
+    // 2. 글쓰기 화면요청 (/board/write : GET)
     @GetMapping("/write")
     public String write() {
-        System.out.println("/board/write GET");
+        System.out.println("/board/write : GET!");
         return "chap05/write";
     }
-    // 3. 글쓰기 등록 요청(/board/write: POST)
+
+
+    // 3. 글쓰기 등록요청 (/board/write : POST)
     @PostMapping("/write")
-    public String write(BoardWriteRequestDTO borad) {
-        service.insertBoard(borad);
+    public String write(BoardWriteRequestDTO dto) {
+        System.out.println("/board/write : POST! - " + dto);
+
+        boardService.register(dto);
         return "redirect:/board/list";
     }
-    // 4. 글 삭제 요청(/board/delete: GET)
+
+
+    // 4. 글 삭제 요청 (/board/delete : GET)
     @GetMapping("/delete")
-    public String delete(int bno) {
-        service.deleteScore(bno);
+    public String delete(@RequestParam("bno") int boardNo) {
+        System.out.println("/board/delete : GET");
+        boardService.delete(boardNo);
         return "redirect:/board/list";
     }
-    // 5. 글 상세 보기 요청 (/board/detail : GET)
+
+    // 5. 글 상세보기 요청 (/board/detail : GET)
     @GetMapping("/detail")
     public String detail(int bno, Model model) {
-        Board board = service.retrieve(bno);
-        BoardDetailResponseDTO boardDetailResponseDTO = new BoardDetailResponseDTO(board);
-        model.addAttribute("b", boardDetailResponseDTO);
+        System.out.println("/board/detail : GET");
+        model.addAttribute("b", boardService.getDetail(bno));
         return "chap05/detail";
     }
 }

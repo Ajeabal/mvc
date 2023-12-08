@@ -16,26 +16,23 @@ public class BoardRepositoryImpl implements BoardRepository {
 
     private static final Map<Integer, Board> boardMap;
 
-    // 게시글 순서
-    private static int bN;
-
-
+    // 글번호 자동으로 증가시키기 위한 공유필드
+    private static int sequence;
 
     static {
         boardMap = new HashMap<>();
-        Board b1 = new Board(++bN,"testTitle1","testContent1");
-        Board b2 = new Board(++bN,"testTitle2","testContent2");
-        Board b3 = new Board(++bN,"testTitle3","testContent3");
+
+        Board b1 = new Board(++sequence, "오늘 장보러 갈건데ㅋ", "뭐 살지 추천좀 해주세요~~");
+        Board b2 = new Board(++sequence, "포켓몬빵 유행 식음?", "편의점에 엄청 ㅁㄴㅎ던뎅 ㄹㄴㅁ아ㅗㄹㄴㅁ오ㅓ라ㅣㅓㅇㅁㄴㄹ와ㅓㄴㅁ");
+        Board b3 = new Board(++sequence, "이마트가 낫냐? 홈플러스가 낳냐??", "마춤뻡이 왜그러냐?????");
 
         boardMap.put(b1.getBoardNo(), b1);
         boardMap.put(b2.getBoardNo(), b2);
         boardMap.put(b3.getBoardNo(), b3);
-
     }
 
     @Override
     public List<Board> findAll() {
-
         return boardMap.values()
                 .stream()
                 .sorted(Comparator.comparing(Board::getBoardNo).reversed())
@@ -43,27 +40,20 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
+    public Board findOne(int boardNo) {
+        return boardMap.get(boardNo);
+    }
+
+    @Override
     public boolean save(Board board) {
-        board.setBoardNo(++bN);
+        board.setBoardNo(++sequence);
         boardMap.put(board.getBoardNo(), board);
-        if (boardMap.containsKey(board.getBoardNo())) {
-            return false;
-        }
         return true;
     }
 
     @Override
-    public boolean delete(int bno) {
-        if (!boardMap.containsKey(bno)) {
-            return false;
-        }
-        boardMap.remove(bno);
+    public boolean deleteByNo(int boardNo) {
+        boardMap.remove(boardNo);
         return true;
-    }
-
-    @Override
-    public Board findOne(int bno) {
-        Board board = boardMap.get(bno);
-        return board;
     }
 }
