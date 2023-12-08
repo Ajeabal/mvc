@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository()
+@Repository
 @RequiredArgsConstructor
 public class BoardJdbcRepository implements BoardRepository {
 
@@ -18,31 +18,34 @@ public class BoardJdbcRepository implements BoardRepository {
 
     @Override
     public List<Board> findAll() {
-        String sql = "SELECT * FROM tbl_board ORDER BY board_no DESC ";
+        String sql = "SELECT * FROM tbl_board ORDER BY board_no DESC";
         return template.query(sql, (rs, rn) -> new Board(rs));
     }
 
     @Override
+    public Board findOne(int boardNo) {
+        String sql = "SELECT * FROM tbl_board WHERE board_no = ?";
+        return template.queryForObject(sql, (rs, rn)-> new Board(rs), boardNo);
+    }
+
+    @Override
     public boolean save(Board board) {
-        String sql = "INSERT INTO tbl_board (title, content) VALUES (?, ?)";
+        String sql = "INSERT INTO tbl_board (title, content) " +
+                "VALUES (?, ?)";
         return template.update(sql, board.getTitle(), board.getContent()) == 1;
     }
 
     @Override
-    public boolean delete(int bno) {
-        String sql = "DELETE FROM tbl_board WHERE board_no=?";
-        return template.update(sql, bno) == 1;
+    public boolean deleteByNo(int boardNo) {
+        String sql = "DELETE FROM tbl_board WHERE board_no = ?";
+        return template.update(sql, boardNo) == 1;
     }
 
     @Override
-    public Board findOne(int bno) {
-        String sql = "SELECT * FROM tbl_board WHERE board_no = ?";
-        return template.queryForObject(sql, (rs, rn) -> new Board(rs), bno);
-    }
-
-    @Override
-    public void updateViewCount(int bno) {
-        String sql = "UPDATE tbl_board SET view_count = view_count +1 WHERE board_no = ?";
-        template.update(sql, bno);
+    public void updateViewCount(int boardNo) {
+        String sql = "UPDATE tbl_board " +
+                "SET view_count = view_count + 1 " +
+                "WHERE board_no = ?";
+        template.update(sql, boardNo);
     }
 }

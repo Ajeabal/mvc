@@ -1,9 +1,12 @@
 package com.spring.mvc.chap05.service;
 
+import com.spring.mvc.chap05.dto.BoardDetailResponseDTO;
 import com.spring.mvc.chap05.dto.BoardResponseDTO;
 import com.spring.mvc.chap05.dto.BoardWriteRequestDTO;
 import com.spring.mvc.chap05.entity.Board;
+import com.spring.mvc.chap05.repository.BoardMapper;
 import com.spring.mvc.chap05.repository.BoardRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -11,32 +14,39 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class BoardService {
 
-    private final BoardRepository repository;
+    private final BoardRepository boardRepository;
 
-    public BoardService(BoardRepository repository) {
-        this.repository = repository;
-    }
-
+    // 목록 조회 중간처리
     public List<BoardResponseDTO> getList() {
-        return repository.findAll()
+        return boardRepository.findAll()
                 .stream()
                 .map(BoardResponseDTO::new)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+                ;
     }
 
-    public void insertBoard(BoardWriteRequestDTO board) {
-        repository.save(new Board(board));
+    // 글 쓰기 중간처리
+    public void register(BoardWriteRequestDTO dto) {
+        // dto 를 엔터티로 변환
+        Board board = new Board(dto);
+        boardRepository.save(board);
     }
 
-    public void deleteScore(int bno) {
-        repository.delete(bno);
+
+    public void delete(int boardNo) {
+        boardRepository.deleteByNo(boardNo);
     }
 
-    public Board  retrieve(int bno) {
-        repository.updateViewCount(bno);
-        return repository.findOne(bno);
+    public BoardDetailResponseDTO getDetail(int bno) {
+        Board board = boardRepository.findOne(bno);
+
+        // 조회수 상승처리
+//        board.upViewCount();
+        boardRepository.updateViewCount(bno);
+
+        return new BoardDetailResponseDTO(board);
     }
 }
