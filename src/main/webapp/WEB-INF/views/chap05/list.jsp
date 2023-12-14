@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -16,6 +16,9 @@
 
     <!-- fontawesome css: https://fontawesome.com -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
+
+    <!— bootstrap css —>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/list.css">
@@ -62,14 +65,28 @@
             </div>
         </c:forEach>
     </div>
-    <ul style="display:flex; font-size: 3em; justify-content:center;">
-        <li style="margin-right: 15px;"><a href="/board/list?pageNo=1">1</a></li>
-        <li style="margin-right: 15px;"><a href="/board/list?pageNo=2">2</a></li>
-        <li style="margin-right: 15px;"><a href="/board/list?pageNo=3">3</a></li>
-        <li style="margin-right: 15px;"><a href="/board/list?pageNo=4">4</a></li>
-        <li style="margin-right: 15px;"><a href="/board/list?pageNo=5">5</a></li>
-    </ul>
+
+    <!-- 게시글 목록 하단 영역 -->
+    <div class="bottom-section">
+        <!-- 페이지 버튼 영역 -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-lg pagination-custom">
+                <c:if test="${maker.prev}">
+                    <li class="page-item"><a class="page-link" href="/board/list?pageNo=${maker.begin - 1}">prev</a>
+                    </li>
+                </c:if>
+                <c:forEach var="i" begin="${maker.begin}" end="${maker.end}" step="1">
+                    <li data-page-num="" class="page-item">
+                        <a class="page-link" href="/board/list?pageNo=${i}">${i}</a></li>
+                </c:forEach>
+                <c:if test="${maker.next}">
+                    <li class="page-item"><a class="page-link" href="/board/list?pageNo=${maker.end + 1}">next</a></li>
+                </c:if>
+            </ul>
+        </nav>
+    </div>
 </div>
+
 
 <!-- 모달 창 -->
 <div class="modal" id="modal">
@@ -81,7 +98,6 @@
         </div>
     </div>
 </div>
-
 
 
 <script>
@@ -120,7 +136,7 @@
             // section태그에 붙은 글번호 읽기
             const bno = e.target.closest('section.card').dataset.bno;
             // 요청 보내기
-            window.location.href= '/board/detail?bno=' + bno;
+            window.location.href = '/board/detail?bno=' + bno;
         }
     });
 
@@ -147,7 +163,6 @@
         const $delBtn = e.target.closest('.card-wrapper')?.querySelector('.del-btn');
         $delBtn.style.opacity = '0';
     }
-
 
 
     $cardContainer.onmouseover = e => {
@@ -178,7 +193,6 @@
     document.querySelector('.add-btn').onclick = e => {
         window.location.href = '/board/write';
     };
-
 
 
 </script>

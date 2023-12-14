@@ -51,4 +51,8 @@ public class BoardService {
 
         return new BoardDetailResponseDTO(board);
     }
+
+    public int getTotalCount() {
+        return boardRepository.getTotalCount();
+    }
 }

@@ -4,6 +4,7 @@ import com.spring.mvc.chap04.dto.ScoreResponseDTO;
 import com.spring.mvc.chap04.entity.Score;
 import com.spring.mvc.chap04.service.ScoreService;
 import com.spring.mvc.chap05.common.Page;
+import com.spring.mvc.chap05.common.PageMaker;
 import com.spring.mvc.chap05.dto.BoardDetailResponseDTO;
 import com.spring.mvc.chap05.dto.BoardResponseDTO;
 import com.spring.mvc.chap05.dto.BoardWriteRequestDTO;
@@ -31,8 +32,10 @@ public class BoardController {
     public String list(Page page,Model model) {
         System.out.println("/board/list : GET!");
         List<BoardResponseDTO> dtoList = boardService.getList(page);
+        PageMaker maker = new PageMaker(page, boardService.getTotalCount());
         System.out.println(page);
         model.addAttribute("bList", dtoList);
+        model.addAttribute("maker", maker);
         return "chap05/list";
     }
 

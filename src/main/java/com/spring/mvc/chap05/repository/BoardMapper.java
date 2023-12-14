@@ -18,4 +18,6 @@ public interface BoardMapper {
     Board findOne(int bno);
 
     void updateViewCount(int bno);
+
+    int getTotalCount();
 }
