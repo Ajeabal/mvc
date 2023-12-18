@@ -79,7 +79,6 @@ public class PageMaker {
 
             ex)  237 / 10 => 23.7  => 올림 24
          */
-
         this.finalPage = (int) Math.ceil((double) totalCount / page.getAmount());
 
         // 마지막 페이지 구간에서 end값을 finalPage값으로 변경

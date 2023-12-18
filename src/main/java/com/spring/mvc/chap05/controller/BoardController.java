@@ -5,6 +5,7 @@ import com.spring.mvc.chap04.entity.Score;
 import com.spring.mvc.chap04.service.ScoreService;
 import com.spring.mvc.chap05.common.Page;
 import com.spring.mvc.chap05.common.PageMaker;
+import com.spring.mvc.chap05.common.Search;
 import com.spring.mvc.chap05.dto.BoardDetailResponseDTO;
 import com.spring.mvc.chap05.dto.BoardResponseDTO;
 import com.spring.mvc.chap05.dto.BoardWriteRequestDTO;
@@ -12,30 +13,30 @@ import com.spring.mvc.chap05.entity.Board;
 import com.spring.mvc.chap05.repository.BoardRepository;
 import com.spring.mvc.chap05.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/board")
 @RequiredArgsConstructor
+@Slf4j
 public class BoardController {
     private final BoardService boardService;
 
     // 1. 목록 조회 요청 (/board/list : GET)
     @GetMapping("/list")
-    public String list(Page page,Model model) {
-        System.out.println("/board/list : GET!");
+    public String list(@ModelAttribute("s") Search page, Model model) {
+        log.info("/board/list : GET!");
         List<BoardResponseDTO> dtoList = boardService.getList(page);
-        PageMaker maker = new PageMaker(page, boardService.getTotalCount());
-        System.out.println(page);
+        PageMaker maker = new PageMaker(page, boardService.getTotalCount(page));
+        log.debug("{}", page);
         model.addAttribute("bList", dtoList);
         model.addAttribute("maker", maker);
+//        model.addAttribute("s", page);
         return "chap05/list";
     }
 
@@ -43,7 +44,7 @@ public class BoardController {
     // 2. 글쓰기 화면요청 (/board/write : GET)
     @GetMapping("/write")
     public String write() {
-        System.out.println("/board/write : GET!");
+        log.info("/board/write : GET!");
         return "chap05/write";
     }
 
@@ -51,8 +52,7 @@ public class BoardController {
     // 3. 글쓰기 등록요청 (/board/write : POST)
     @PostMapping("/write")
     public String write(BoardWriteRequestDTO dto) {
-        System.out.println("/board/write : POST! - " + dto);
-
+        log.info("/board/write : POST! - " + dto);
         boardService.register(dto);
         return "redirect:/board/list";
     }
@@ -61,15 +61,15 @@ public class BoardController {
     // 4. 글 삭제 요청 (/board/delete : GET)
     @GetMapping("/delete")
     public String delete(@RequestParam("bno") int boardNo) {
-        System.out.println("/board/delete : GET");
+        log.info("/board/delete : GET");
         boardService.delete(boardNo);
         return "redirect:/board/list";
     }
 
     // 5. 글 상세보기 요청 (/board/detail : GET)
     @GetMapping("/detail")
-    public String detail(int bno, Model model) {
-        System.out.println("/board/detail : GET");
+    public String detail(int bno, @ModelAttribute("s") Search search, Model model) {
+        log.info("/board/detail : GET");
         model.addAttribute("b", boardService.getDetail(bno));
         return "chap05/detail";
     }
