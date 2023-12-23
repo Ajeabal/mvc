@@ -1,16 +1,9 @@
 package com.spring.mvc.chap05.controller;
 
-import com.spring.mvc.chap04.dto.ScoreResponseDTO;
-import com.spring.mvc.chap04.entity.Score;
-import com.spring.mvc.chap04.service.ScoreService;
-import com.spring.mvc.chap05.common.Page;
 import com.spring.mvc.chap05.common.PageMaker;
 import com.spring.mvc.chap05.common.Search;
-import com.spring.mvc.chap05.dto.BoardDetailResponseDTO;
-import com.spring.mvc.chap05.dto.BoardResponseDTO;
-import com.spring.mvc.chap05.dto.BoardWriteRequestDTO;
-import com.spring.mvc.chap05.entity.Board;
-import com.spring.mvc.chap05.repository.BoardRepository;
+import com.spring.mvc.chap05.dto.response.BoardResponseDTO;
+import com.spring.mvc.chap05.dto.request.BoardWriteRequestDTO;
 import com.spring.mvc.chap05.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

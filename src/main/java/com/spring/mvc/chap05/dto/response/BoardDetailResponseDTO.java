@@ -1,13 +1,10 @@
-package com.spring.mvc.chap05.dto;
+package com.spring.mvc.chap05.dto.response;
 
 import com.spring.mvc.chap05.entity.Board;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Getter @ToString @EqualsAndHashCode
 @RequiredArgsConstructor

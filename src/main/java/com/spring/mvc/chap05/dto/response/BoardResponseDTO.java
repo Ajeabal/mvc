@@ -1,4 +1,4 @@
-package com.spring.mvc.chap05.dto;
+package com.spring.mvc.chap05.dto.response;
 
 import com.spring.mvc.chap04.entity.Grade;
 import com.spring.mvc.chap04.entity.Score;

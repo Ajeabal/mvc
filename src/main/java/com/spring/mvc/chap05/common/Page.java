@@ -5,6 +5,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 public class Page {
 
     private int pageNo; // 클라이언트가 요청한 페이지 번호
