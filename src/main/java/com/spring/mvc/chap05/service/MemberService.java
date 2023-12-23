@@ -31,7 +31,7 @@ public class MemberService {
         Member foundMember = memberMapper.findMember(dto.getAccount());
 
         if (foundMember == null) { // 회원강비을 하지 않은 상태
-            log.info("{} - 회원가입을 해야합니다.", dto.getAccount());
+            log.info("회원가입을 해야합니다.");
             return NO_ACC;
         }
 
@@ -44,5 +44,10 @@ public class MemberService {
         }
         log.info("{}님 로그인 완료", foundMember.getAccount());
         return SUCCESS;
+    }
+
+    // 아이디, 이메일 중복검사 서비스
+    public boolean checkDuplicateValue(String type, String keyword) {
+        return memberMapper.isDuplicate(type, keyword);
     }
 }
