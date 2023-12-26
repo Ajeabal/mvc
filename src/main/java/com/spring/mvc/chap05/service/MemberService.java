@@ -2,12 +2,15 @@ package com.spring.mvc.chap05.service;
 
 import com.spring.mvc.chap05.dto.request.LoginRequestDTO;
 import com.spring.mvc.chap05.dto.request.SignUpRequestDTO;
+import com.spring.mvc.chap05.dto.response.LoginUserResponseDTO;
 import com.spring.mvc.chap05.entity.Member;
 import com.spring.mvc.chap05.repository.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpSession;
 
 import static com.spring.mvc.chap05.service.LoginResult.*;
 
@@ -28,7 +31,7 @@ public class MemberService {
 
     // 로그인 처리
     public LoginResult authenticate(LoginRequestDTO dto) {
-        Member foundMember = memberMapper.findMember(dto.getAccount());
+        Member foundMember = getMember(dto.getAccount());
 
         if (foundMember == null) { // 회원강비을 하지 않은 상태
             log.info("회원가입을 해야합니다.");
@@ -46,8 +49,35 @@ public class MemberService {
         return SUCCESS;
     }
 
+    private Member getMember(String account) {
+        return memberMapper.findMember(account);
+    }
+
     // 아이디, 이메일 중복검사 서비스
     public boolean checkDuplicateValue(String type, String keyword) {
         return memberMapper.isDuplicate(type, keyword);
+    }
+
+    // 세션을 이용해 일반 로그인 유지하기
+    public void maintainLoginState(HttpSession session, String accout) {
+        // 세션은 서버에서만 유일하게 보관되는 데이터로서
+        // 로그인 유지 등 상태유지가 필요할 때 사용되는 개념이다.
+        // 세션은 쿠키와 달리 모든 데이터를 저장할 수 있다.
+        // 세션의 수명은 설정한 수명시간에 영향을 받고 브라우저의 수명과 함께한다.
+
+        // 현재 로그인한 사람의 모든 정보 조회
+        Member member = getMember(accout);
+
+        LoginUserResponseDTO dto = LoginUserResponseDTO.builder()
+                .account(member.getAccount())
+                .email(member.getEmail())
+                .nickName(member.getName())
+                .build();
+
+        // 조회한 정보를 세션에 저장
+        session.setAttribute("login", dto);
+
+        // 세션도 수명을 설정해야 한다.
+        session.setMaxInactiveInterval(60 * 60); // 1시간이 지나면 로그인이 풀림.
     }
 }

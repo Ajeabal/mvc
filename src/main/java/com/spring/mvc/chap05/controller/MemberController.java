@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/members")
 @Slf4j
@@ -64,7 +69,9 @@ public class MemberController {
     public String signIn(LoginRequestDTO dto,
                          // 모델에 담긴 데이터는 redirect시 jsp로 가지 않는다
                          // redirect는 요청이 2번 들가기 때문에 첫번째 요청시 model에 보관된 데이터가 소실된다
-                         RedirectAttributes ra) {
+                         RedirectAttributes ra,
+                         HttpServletResponse response,
+                         HttpServletRequest request) {
         log.info("/members/sign-in POST!");
         log.debug("param: {}", dto);
         LoginResult loginResult = memberService.authenticate(dto);
@@ -72,8 +79,27 @@ public class MemberController {
 
         ra.addFlashAttribute("msg", loginResult);
         if(loginResult.equals(LoginResult.SUCCESS)){
-            return "redirect:/board/list";
+
+            memberService.maintainLoginState(request.getSession(), dto.getAccount());
+
+            return "redirect:/";
         }
         return "redirect:/members/sign-in";
+    }
+
+    // 로그아웃 요청 처리
+    @GetMapping("/sign-out")
+    public String signOut(
+//            HttpServletRequest request
+            HttpSession session
+    ) {
+        // 세션 얻기
+//        HttpSession session = request.getSession();
+
+        // 세션에서 로그인 정보 기록 삭제
+        session.removeAttribute("login");
+        // 세션 초기화
+        session.invalidate();
+        return "redirect:/";
     }
 }
