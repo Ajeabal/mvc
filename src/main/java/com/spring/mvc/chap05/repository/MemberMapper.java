@@ -1,5 +1,6 @@
 package com.spring.mvc.chap05.repository;
 
+import com.spring.mvc.chap05.dto.request.AutoLoginDTO;
 import com.spring.mvc.chap05.entity.Member;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,4 +22,10 @@ public interface MemberMapper {
      */
     // 중복체크 (account, email) 기능
     boolean isDuplicate(@Param("type") String type,@Param("keyword") String keyword);
+
+    // 자동 로그인 세션 키, 만료시간 업데이트
+    void saveAutoLogin(AutoLoginDTO dto);
+
+    // 쿠키값(세션아이디)으로 회원 정보를 조회
+    Member findMemberByCookie(String sessionId);
 }

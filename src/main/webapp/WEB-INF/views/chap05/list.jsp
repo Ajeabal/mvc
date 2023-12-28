@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <title>Insert title here</title>
 
-    <%@include file="../include/static-head.jsp"%>
+    <%@include file="../include/static-head.jsp" %>
 
     <link rel="stylesheet" href="/assets/css/list.css">
 
@@ -15,13 +15,15 @@
 
 
 <body>
-<%@include file="../include/header.jsp"%>
+<%@include file="../include/header.jsp" %>
 
 <div id="wrap">
 
     <div class="main-title-wrapper">
         <h1 class="main-title">꾸러기 게시판</h1>
-        <button class="add-btn">새 글 쓰기</button>
+        <c:if test="${login !=null}">
+            <button class="add-btn">새 글 쓰기</button>
+        </c:if>
     </div>
 
     <div class="top-section">
@@ -52,7 +54,6 @@
     </div>
 
 
-
     <div class="card-container">
         <c:forEach var="b" items="${bList}">
             <div class="card-wrapper">
@@ -73,11 +74,13 @@
                             ${b.shortContent}
                     </div>
                 </section>
-                <div class="card-btn-group">
-                    <button class="del-btn" data-href="/board/delete?bno=${b.boardNo}">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+                <c:if test="${login.account == b.account || login.auth == 'ADMIN'}">
+                    <div class="card-btn-group">
+                        <button class="del-btn" data-href="/board/delete?bno=${b.boardNo}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </c:if>
             </div>
         </c:forEach>
     </div>

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -44,9 +45,9 @@ public class BoardController {
 
     // 3. 글쓰기 등록요청 (/board/write : POST)
     @PostMapping("/write")
-    public String write(BoardWriteRequestDTO dto) {
+    public String write(BoardWriteRequestDTO dto, HttpSession session) {
         log.info("/board/write : POST! - " + dto);
-        boardService.register(dto);
+        boardService.register(session,dto);
         return "redirect:/board/list";
     }
 
