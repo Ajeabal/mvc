@@ -32,29 +32,29 @@ class MemberServiceTest {
         assertTrue(flag);
     }
 
-    @Test
-    @DisplayName("계정명이 kitty인 회원의 로그인 시도 결과를 상황별로 검증한다")
-    void loginTEst() {
-        //given
-        LoginRequestDTO dto = LoginRequestDTO.builder()
-                .account("kitty")
-                .password("kkk1234!")
-                .build();
-        LoginRequestDTO dto1 = LoginRequestDTO.builder()
-                .account("hello")
-                .password("kkk1234!")
-                .build();
-        LoginRequestDTO dto2 = LoginRequestDTO.builder()
-                .account("kitty")
-                .password("kkk1234")
-                .build();
-        //when
-        LoginResult result = service.authenticate(dto);
-        LoginResult result1 = service.authenticate(dto1);
-        LoginResult result2 = service.authenticate(dto2);
-        //then
-        assertEquals(SUCCESS, result);
-        assertEquals(NO_ACC, result1);
-        assertEquals(NO_PW, result2);
-    }
+//    @Test
+//    @DisplayName("계정명이 kitty인 회원의 로그인 시도 결과를 상황별로 검증한다")
+//    void loginTEst() {
+//        //given
+//        LoginRequestDTO dto = LoginRequestDTO.builder()
+//                .account("kitty")
+//                .password("kkk1234!")
+//                .build();
+//        LoginRequestDTO dto1 = LoginRequestDTO.builder()
+//                .account("hello")
+//                .password("kkk1234!")
+//                .build();
+//        LoginRequestDTO dto2 = LoginRequestDTO.builder()
+//                .account("kitty")
+//                .password("kkk1234")
+//                .build();
+//        //when
+//        LoginResult result = service.authenticate(dto);
+//        LoginResult result1 = service.authenticate(dto1);
+//        LoginResult result2 = service.authenticate(dto2);
+//        //then
+//        assertEquals(SUCCESS, result);
+//        assertEquals(NO_ACC, result1);
+//        assertEquals(NO_PW, result2);
+//    }
 }

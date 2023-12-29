@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -55,7 +56,9 @@ public class ReplyApiController {
 
     // 댓글 등록 요청 처리
     @PostMapping
-    public ResponseEntity<?> create(@Validated @RequestBody ReplyPostRequestDTO dto, BindingResult result) {
+    public ResponseEntity<?> create(@Validated @RequestBody ReplyPostRequestDTO dto,
+                                    BindingResult result,
+                                    HttpSession session) {
         if (result.hasErrors()) {
             return ResponseEntity
                     .badRequest()
@@ -64,7 +67,7 @@ public class ReplyApiController {
 
         log.debug("{}", dto);
         try {
-            ReplyListResponseDTO responseDTO = replyService.register(dto);
+            ReplyListResponseDTO responseDTO = replyService.register(dto, session);
             return ResponseEntity.ok().body(responseDTO);
         } catch (SQLException e) {
             log.warn("500 status code response cause by: {}", e.getMessage());

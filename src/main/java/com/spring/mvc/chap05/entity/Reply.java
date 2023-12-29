@@ -32,7 +32,10 @@ public class Reply {
     private long replyNo;
     @Setter
     private String replyText;
+    @Setter
     private String replyWriter;
     private LocalDateTime replyDate;
     private long boardNo;
+    @Setter
+    private String account;
 }

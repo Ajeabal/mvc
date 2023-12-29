@@ -43,7 +43,7 @@
             font-size: 20px;
         }
 
-        #title {
+        #title, #writer {
             font-size: 18px;
             width: 100%;
             padding: 8px;
@@ -125,6 +125,8 @@
     <h2># 작성일자: ${b.date }</h2>
     <label for="title">제목</label>
     <input type="text" id="title" name="title" value="${b.title}" readonly>
+    <label for="writer">작성자</label>
+    <input type="text" id="writer" name="writer" value="${b.writer}" readonly>
     <label for="content">내용</label>
     <div id="content">${b.content}</div>
     <div class="buttons">
@@ -140,26 +142,34 @@
             <!-- 댓글 쓰기 영역 -->
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-9">
-                            <div class="form-group">
-                                <label for="newReplyText" hidden>댓글 내용</label>
-                                <textarea rows="3" id="newReplyText" name="replyText" class="form-control"
-                                          placeholder="댓글을 입력해주세요."></textarea>
+
+                    <c:if test="${empty login}">
+                        <a href="/members/sign-in">댓글은 로그인 이후 작성 가능합니다.</a>
+                    </c:if>
+
+
+                    <c:if test="${not empty login}">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label for="newReplyText" hidden>댓글 내용</label>
+                                    <textarea rows="3" id="newReplyText" name="replyText" class="form-control"
+                                              placeholder="댓글을 입력해주세요."></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="newReplyWriter" hidden>댓글 작성자</label>
+                                    <input id="newReplyWriter" name="replyWriter" type="text"
+                                           class="form-control" placeholder="작성자 이름"
+                                           style="margin-bottom: 6px;" value="${login.nickName}" readonly>
+                                    <button id="replyAddBtn" type="button"
+                                            class="btn btn-dark form-control">등록
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="newReplyWriter" hidden>댓글 작성자</label>
-                                <input id="newReplyWriter" name="replyWriter" type="text"
-                                       class="form-control" placeholder="작성자 이름"
-                                       style="margin-bottom: 6px;">
-                                <button id="replyAddBtn" type="button"
-                                        class="btn btn-dark form-control">등록
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    </c:if>
                 </div>
             </div> <!-- end reply write -->
 
@@ -224,7 +234,9 @@
 </div>
 <script>
     const URL = '/api/v1/replies';
-    const bno = '${b.boardNo}'
+    const bno = '${b.boardNo}';
+    const currentAccount = '${login.account}';
+    const auth = '${login.auth}'
 
     // 화면에 페이지들을 렌더링 하는 함수
     function renderPage({begin, end, prev, next, page, finalPage}) {
@@ -267,7 +279,7 @@
         if (replies !== null && replies.length > 0) {
             for (let reply of replies) {
 
-                const {rno, writer, text, regDate} = reply;
+                const {rno, writer, text, regDate, account} = reply;
 
                 tag += `
                     <div id='replyContent' class='card-body' data-replyId='\${rno}'>
@@ -275,14 +287,19 @@
                             <span class='col-md-3'>
                                 <b>\${writer}</b>
                             </span>
-                            <span class='offset-md-6 col-md-3 text-right'><b>\${regDate}</b></span>
+                            <span class='col-md-4 text-right'><b>\${regDate}</b></span>
                         </div><br>
                         <div class='row'>
                             <div class='col-md-9'>\${text}</div>
                             <div class='col-md-3 text-right'>
-                                <a id='replyModBtn' class='btn btn-sm btn-outline-dark' data-bs-toggle='modal' data-bs-target='#replyModifyModal'>수정</a>&nbsp;
+                            `;
+                if (auth === "ADMIN" || currentAccount === account) {
+                    tag += `<a id='replyModBtn' class='btn btn-sm btn-outline-dark' data-bs-toggle='modal' data-bs-target='#replyModifyModal'>수정</a>&nbsp;
                                 <a id='replyDelBtn' class='btn btn-sm btn-outline-dark' href='#'>삭제</a>
-                            </div>
+                            `;
+                }
+
+                    tag += `</div>
                         </div>
                     </div>
                 `;
@@ -379,8 +396,6 @@
                     // console.log(responseData)
                     // 입력창을 비운 후 새로운 목록을 재생성
                     $replyText.value = '';
-                    $replyWriter.value = '';
-
                     fetchGetReplies(responseData.pageInfo.finalPage);
                 });
         }
