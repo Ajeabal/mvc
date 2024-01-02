@@ -33,10 +33,10 @@ public class MemberService {
     private final PasswordEncoder encoder;
 
     // 회원가입 처리
-    public boolean join(SignUpRequestDTO dto) {
+    public boolean join(SignUpRequestDTO dto, String savePath) {
         // 클라이언트가 보낸 회원가입 데이터를
         // 패스워드 인코딩하여 엔터티로 변환 전달해야한다.
-        return memberMapper.save(dto.toEntity(encoder));
+        return memberMapper.save(dto.toEntity(encoder, savePath));
     }
 
     // 로그인 처리
@@ -110,6 +110,7 @@ public class MemberService {
                 .email(member.getEmail())
                 .nickName(member.getName())
                 .auth(member.getAuth().name())
+                .profile(member.getProfileImage())
                 .build();
         log.debug("login: {}", dto);
         // 조회한 정보를 세션에 저장

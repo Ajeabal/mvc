@@ -37,10 +37,10 @@
                             </tr>
                             <tr>
                                 <td><input type="text" name="account" id="signInId"
-                                           class="form-control tooltipstered" maxlength="10"
+                                           class="form-control tooltipstered" maxlength="14"
                                            required="required" aria-required="true"
                                            style="margin-bottom: 25px; width: 100%; height: 40px; border: 1px solid #d9d9de"
-                                           placeholder="최대 10자"></td>
+                                           placeholder="최대 14자"></td>
                             </tr>
                             <tr>
                                 <td style="text-align: left">
