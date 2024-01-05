@@ -36,6 +36,7 @@ public class MemberService {
     public boolean join(SignUpRequestDTO dto, String savePath) {
         // 클라이언트가 보낸 회원가입 데이터를
         // 패스워드 인코딩하여 엔터티로 변환 전달해야한다.
+        savePath = "/local" + savePath;
         return memberMapper.save(dto.toEntity(encoder, savePath));
     }
 

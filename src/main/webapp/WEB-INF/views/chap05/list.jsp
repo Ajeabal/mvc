@@ -152,6 +152,7 @@
 
             const $delBtn = e.target.closest('.del-btn');
             const deleteLocation = $delBtn.dataset.href;
+            console.log(deleteLocation);
 
             // 확인 버튼 이벤트
             confirmDelete.onclick = e => {

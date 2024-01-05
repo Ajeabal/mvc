@@ -309,13 +309,16 @@
         if (replies !== null && replies.length > 0) {
             for (let reply of replies) {
 
-                const {rno, writer, text, regDate, account} = reply;
+                const {rno, writer, text, regDate, account, profile} = reply;
 
                 tag += `
                     <div id='replyContent' class='card-body' data-replyId='\${rno}'>
                         <div class='row user-block'>
                             <span class='col-md-3'>
-                                <b>\${writer}</b>
+                                `;
+                        tag += (profile ? `<img class="reply-profile" src="/local\${profile}" alt="profile image">`
+                                        : `<img class="reply-profile" src="/assets/img/anonymous.jpg" alt="anonymous">`);
+                           tag += `<b>\${writer}</b>
                             </span>
                             <span class='col-md-4 text-right'><b>\${regDate}</b></span>
                         </div><br>
